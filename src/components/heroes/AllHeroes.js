@@ -1,4 +1,15 @@
 // https://raw.githubusercontent.com/kronusme/dota2-api/master/data/heroes.json
+
+// https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v0001/?key=3D7D20701E1BA0C6C66D11A76D95FA58
+
+// http://cdn.dota2.com/apps/dota2/images/heroes/axe_sb.png images
+// http://cdn.dota2.com/apps/dota2/images/heroes/axe_vert.jpg
+/*
+ sb.png: 59x33px small horizontal portrait
+ lg.png: 205x105px large horizontal portrait
+ full.png: 256x144px full-quality horizontal portrait
+ vert.jpg: 235x272px full-quality vertical portrait (note that this is a .jpg)
+ */
 export const HEROES = [
 {
     "name": "antimage",
