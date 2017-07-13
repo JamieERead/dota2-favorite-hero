@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 function HeroItem(props) {
-    return <li>{props.hero.name}</li>;
+    return <li><img src={'http://cdn.dota2.com/apps/dota2/images/heroes/' + props.hero.name + '_sb.png'} /></li>;
 }
 
 export default class HeroesList extends Component {
