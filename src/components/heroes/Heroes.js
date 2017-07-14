@@ -67,7 +67,7 @@ class HeroesList extends Component {
         // });
 
 
-        // const user = this.auth0.getUser();
+        // const user = this.auth0.getUser() ;
         // console.log(user)
 
         // const data = {
