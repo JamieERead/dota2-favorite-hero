@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import auth0 from 'auth0-js'
+import { AUTH_CONFIG } from '../../Auth/auth0-variables';
 
 function HeroItem(props) {
     const heroName = props.hero.name.replace('npc_dota_hero_', '');
@@ -14,6 +16,11 @@ function HeroItem(props) {
 }
 
 class HeroesList extends Component {
+    auth0 = new auth0.Management({
+        domain: AUTH_CONFIG.domain,
+        token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9FVTVNRFV3TmtVeU56TXdOVUV4TnpneVJrWXdSVEV4TUVWQ05USkRNME5CT1RKRlJqRTBRUSJ9',
+    });
+
     constructor(){
         super();
         this.state = {heroes: [], loading: true};
@@ -52,14 +59,55 @@ class HeroesList extends Component {
         currentHero.favourite = !currentHero.favourite;
         this.setState({heroes: heroes});
 
-        var instance = axios.create({
+        // var instance = axios.create({
+        //     headers: {
+        //         "authorization": "Bearer ABCD",
+        //         "content-type": "application/json"
+        //     },
+        // });
+
+
+        // const user = this.auth0.getUser();
+        // console.log(user)
+
+        // const data = {
+        //     client_id: AUTH_CONFIG.clientId,
+        //     client_secret: 'JgCI-0vDuyBw7zYhfBfz1hzjtbF_t5mGFTa5X5HKar3bP11GNOdrv-zANN2rji7U',
+        //     type: 'web_server',
+        //     grant_type: 'client_credentials'
+        // }
+        //
+        // const myInit = {
+        //     method: 'POST',
+        //     headers: {
+        //         "content-type": "application/json"
+        //     },
+        //     mode: 'no-cors',
+        //     cache: 'default',
+        //     body: JSON.stringify(data)
+        // };
+        //
+        // fetch('https://dota2fav.eu.auth0.com/oauth/token', myInit)
+        //     .then(response => {
+        //         console.log(response)
+        //     })
+
+        const myInit = {
+            method: 'PATCH',
             headers: {
-                "authorization": "Bearer ABCD",
+                // 'Access-Control-Allow-Origin': 'https://dota2fav.eu.auth0.com',
+                // 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, DELETE, PUT',
+                "authorization": "Bearer " + localStorage.getItem('access_token'),
                 "content-type": "application/json"
             },
-        });
+            cache: 'default',
+            body: {user_metadata: {heroes: [1, 2, 3]} }
+        };
 
-        instance.post('https://youraccount.auth0.com/api/v2/users', JSON.stringify({heroes: [1, 2, 3]}))
+        fetch(`https://${AUTH_CONFIG.domain}/api/v2/users/5967ce404349fc3abb24697b`, myInit)
+            .then(response => {
+                console.log(response)
+            })
     };
 
     render() {
