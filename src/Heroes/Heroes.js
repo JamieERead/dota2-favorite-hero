@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import auth0 from 'auth0-js'
-import { AUTH_CONFIG } from '../../Auth/auth0-variables';
 
 function HeroItem(props) {
     const heroName = props.hero.name.replace('npc_dota_hero_', '');
@@ -18,7 +16,11 @@ function HeroItem(props) {
 class HeroesList extends Component {
     constructor(){
         super();
-        this.state = {heroes: [], loading: true};
+        this.state = {
+            user: {},
+            heroes: [],
+            loading: true
+        };
     }
 
     componentWillMount(){
@@ -26,12 +28,22 @@ class HeroesList extends Component {
     }
 
     loadHeroes(){
-        axios.get('/heroes')
+        let user = {};
+        axios.get('/user/' + localStorage.getItem('user_id'))
+            .then(_user => {
+                user = _user.data;
+                return axios.get('/heroes');
+            })
             .then(({data}) => {
                 const heroes = data.result.heroes;
-                heroes.forEach(hero => hero['favourite'] = false);
+                const favoriteHeroes = user.user_metadata.heroes;
+                const formattedHeroes = heroes.map(hero => {
+                    hero['favourite'] = favoriteHeroes.indexOf(hero.id) !== -1;
+                    return hero;
+                });
                 this.setState({
-                    heroes: heroes,
+                    user: user,
+                    heroes: formattedHeroes,
                     loading: false
                 });
             })
@@ -41,20 +53,27 @@ class HeroesList extends Component {
     }
 
     toggleFavouriteHero = (heroId) => {
-        // API call to save
+        // set the state before the api call
         const heroes = this.state.heroes.slice();
         let currentHero = heroes.find(hero => hero.id === heroId);
         currentHero.favourite = !currentHero.favourite;
         this.setState({heroes: heroes});
 
-        axios.patch('/update-hero', {user_metadata: {heroes: [1, 2, 3]} })
-            .then(data => {
-                console.log(data)
-            })
+        // get all current favourite heroes and call save
+        const favoriteHeroes =  heroes.filter(hero => hero.favourite).map(hero => hero.id);
+        this.saveHeroes(favoriteHeroes);
+    };
+
+    saveHeroes(favoriteHeroes){
+        const payload = {
+            userId: localStorage.getItem('user_id'),
+            data: {user_metadata: {heroes: favoriteHeroes} },
+        };
+        axios.patch('/update-hero', payload)
             .catch(function(error) {
                 console.log('Request failed', error)
             });
-    };
+    }
 
     render() {
         const heroes = this.state.heroes;

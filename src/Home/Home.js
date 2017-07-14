@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import HeroesList from '../components/heroes/Heroes';
+import HeroesList from '../Heroes/Heroes';
 
 class Home extends Component {
     login() {
@@ -11,12 +11,7 @@ class Home extends Component {
         return (
             <div className="container">
                 {
-                    isAuthenticated() && (
-                        <div>
-                            <h4>You are logged in!</h4>
-                            <HeroesList/>
-                        </div>
-                    )
+                    isAuthenticated() && <HeroesList/>
                 }
                 {
                     !isAuthenticated() && (
