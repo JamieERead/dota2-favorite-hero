@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import './App.css';
+import './app.css';
+import HeroesList from '../Heroes/heroes';
 
 class App extends Component {
     goTo(route) {
@@ -46,6 +47,25 @@ class App extends Component {
                         </div>
                     </div>
                 </nav>
+                <div className="container">
+                    {
+                        isAuthenticated() && <HeroesList/>
+                    }
+                    {
+                        !isAuthenticated() && (
+                            <h4>
+                                You are not logged in! Please{' '}
+                                <a
+                                    style={{cursor: 'pointer'}}
+                                    onClick={this.login.bind(this)}
+                                >
+                                    Log In
+                                </a>
+                                {' '}to continue.
+                            </h4>
+                        )
+                    }
+                </div>
             </div>
         );
     }
