@@ -10,7 +10,8 @@
     "npm-run-all": "^4.0.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.10"
+    "react-router-dom": "^4.1.1",
+    "react-scripts": "^1.0.10"
   },
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
@@ -20,8 +21,5 @@
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "devDependencies": {
-    "@types/react": "^15.0.37"
   }
 }

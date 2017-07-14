@@ -8,7 +8,7 @@ function HeroItem(props) {
     return(
         <li className="hero">
             <i className={iconClass} aria-hidden="true" onClick={() => props.toggleFavouriteHero(heroId)}></i>
-            <img src={`http://cdn.dota2.com/apps/dota2/images/heroes/${heroName}_vert.jpg`} />
+            <img src={`http://cdn.dota2.com/apps/dota2/images/heroes/${heroName}_vert.jpg`} alt={heroName} />
         </li>
     );
 }
@@ -24,6 +24,13 @@ class HeroesList extends Component {
     }
 
     loadHeroes(){
+        // var instance = axios.create({
+        //     headers: {
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTION',
+        //         'Access-Control-Allow-Headers': 'Content-Type, Accept'
+        //     }
+        // });
         axios.get('https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v1?key=3D7D20701E1BA0C6C66D11A76D95FA58')
             .then(({data}) => {
                 const heroes = data.result.heroes;
@@ -44,6 +51,15 @@ class HeroesList extends Component {
         let currentHero = heroes.find(hero => hero.id === heroId);
         currentHero.favourite = !currentHero.favourite;
         this.setState({heroes: heroes});
+
+        var instance = axios.create({
+            headers: {
+                "authorization": "Bearer ABCD",
+                "content-type": "application/json"
+            },
+        });
+
+        instance.post('https://youraccount.auth0.com/api/v2/users', JSON.stringify({heroes: [1, 2, 3]}))
     };
 
     render() {
