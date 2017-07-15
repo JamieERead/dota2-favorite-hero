@@ -36,7 +36,8 @@ class HeroesList extends Component {
             })
             .then(({data}) => {
                 const heroes = data.result.heroes;
-                const favoriteHeroes = user.user_metadata.heroes;
+                const favoriteHeroes = (user.user_metadata && user.user_metadata.heroes)
+                                    ? user.user_metadata.heroes : [];
                 const formattedHeroes = heroes.map(hero => {
                     hero['favourite'] = favoriteHeroes.indexOf(hero.id) !== -1;
                     return hero;
