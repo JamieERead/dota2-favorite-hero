@@ -39,7 +39,7 @@ app.get('/user/:userId', (request, response) => {
             method: 'GET',
             uri: `https://dota2fav.eu.auth0.com/api/v2/users/${params.userId}`,
             headers: {
-                'Authorization': managementAPI.access_token,
+                'Authorization': 'Bearer ' + JSON.parse(managementAPI).access_token, // FIX
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
@@ -48,7 +48,30 @@ app.get('/user/:userId', (request, response) => {
         return rp(options);
     })
     .then(data => {
-        response.setHeader('Content-Type', 'application/json');
+        response.send(data);
+    })
+    .catch(err => {
+        console.log(err)
+    });
+});
+
+app.patch('/update-hero', (request, response) => {
+    getManagementToken().then(managementAPI => {
+        const params = request.params;
+        const options = {
+            method: 'PATCH',
+            uri: `https://dota2fav.eu.auth0.com/api/v2/users/${request.body.userId}`,
+            headers: {
+                'Authorization': 'Bearer ' + JSON.parse(managementAPI).access_token, // FIX
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: request.body.data,
+            json: true // Automatically parses the JSON string in the response
+        };
+        return rp(options);
+    })
+    .then(data => {
         response.send(data);
     })
     .catch(err => {
@@ -62,33 +85,11 @@ app.get('/heroes', (request, response) => {
         uri: 'https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v1?key=3D7D20701E1BA0C6C66D11A76D95FA58',
     };
     rp(options).then(data => {
-        response.setHeader('Content-Type', 'application/json');
         response.send(data);
     })
-        .catch(err => {
-            console.log(err)
-        });
-});
-
-app.patch('/update-hero', (request, response) => {
-    const options = {
-        method: 'PATCH',
-        uri: `https://dota2fav.eu.auth0.com/api/v2/users/${request.body.userId}`,
-        headers: {
-            'Authorization': ManagementAPIToken,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        body: request.body.data,
-        json: true // Automatically parses the JSON string in the response
-    };
-    rp(options).then(data => {
-        response.setHeader('Content-Type', 'application/json');
-        response.send(data);
-    })
-        .catch(err => {
-            console.log(err)
-        });
+    .catch(err => {
+        console.log(err)
+    });
 });
 
 // Always return the main index.html, so react-router render the route in the client
