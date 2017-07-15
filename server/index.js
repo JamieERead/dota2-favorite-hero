@@ -16,17 +16,50 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 app.use(bodyParser.json());
 
+function getManagementToken() {
+    const body = {
+        "grant_type": "client_credentials",
+        "client_id": "brPposxag05Lk3YKE7QOgo8g21jB4Em9",
+        "client_secret": "M5JIh4KI9Nd1K4mQ4lJHXtskNaSH3aFYJn9qRoej_PvgQ3m_GeUVfpJ9EyMShxHm",
+        "audience": "https://dota2fav.eu.auth0.com/api/v2/"
+    };
+    const options = {
+        method: 'POST',
+        uri: 'https://dota2fav.eu.auth0.com/oauth/token',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body, null, 3)
+    };
+    return rp(options);
+}
+
 app.get('/user/:userId', (request, response) => {
-    const params = request.params;
+    getManagementToken().then(managementAPI => {
+        const params = request.params;
+        const options = {
+            method: 'GET',
+            uri: `https://dota2fav.eu.auth0.com/api/v2/users/${params.userId}`,
+            headers: {
+                'Authorization': managementAPI.access_token,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            json: true // Automatically parses the JSON string in the response
+        };
+        return rp(options);
+    })
+    .then(data => {
+        response.setHeader('Content-Type', 'application/json');
+        response.send(data);
+    })
+    .catch(err => {
+        console.log(err)
+    });
+});
+
+app.get('/heroes', (request, response) => {
     const options = {
         method: 'GET',
-        uri: `https://dota2fav.eu.auth0.com/api/v2/users/${params.userId}`,
-        headers: {
-            'Authorization': ManagementAPIToken,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        json: true // Automatically parses the JSON string in the response
+        uri: 'https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v1?key=3D7D20701E1BA0C6C66D11A76D95FA58',
     };
     rp(options).then(data => {
         response.setHeader('Content-Type', 'application/json');
@@ -35,25 +68,6 @@ app.get('/user/:userId', (request, response) => {
         .catch(err => {
             console.log(err)
         });
-});
-
-app.get('/heroes', (request, response) => {
-    const options = {
-        method: 'GET',
-        uri : 'https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v1?key=3D7D20701E1BA0C6C66D11A76D95FA58',
-        // headers: {
-        //     'Content-Type': 'application/json',
-        //     'Accept': 'application/json'
-        // },
-        // json: true
-    };
-    rp(options).then(data => {
-        response.setHeader('Content-Type', 'application/json');
-        response.send(data);
-    })
-    .catch(err => {
-        console.log(err)
-    });
 });
 
 app.patch('/update-hero', (request, response) => {
@@ -72,9 +86,9 @@ app.patch('/update-hero', (request, response) => {
         response.setHeader('Content-Type', 'application/json');
         response.send(data);
     })
-    .catch(err => {
-        console.log(err)
-    });
+        .catch(err => {
+            console.log(err)
+        });
 });
 
 // Always return the main index.html, so react-router render the route in the client
