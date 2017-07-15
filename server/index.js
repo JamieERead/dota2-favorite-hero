@@ -16,6 +16,27 @@ app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 app.use(bodyParser.json());
 
+app.get('/user/:userId', (request, response) => {
+    const params = request.params;
+    const options = {
+        method: 'GET',
+        uri: `https://dota2fav.eu.auth0.com/api/v2/users/${params.userId}`,
+        headers: {
+            'Authorization': ManagementAPIToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        json: true // Automatically parses the JSON string in the response
+    };
+    rp(options).then(data => {
+        response.setHeader('Content-Type', 'application/json');
+        response.send(data);
+    })
+        .catch(err => {
+            console.log(err)
+        });
+});
+
 app.get('/heroes', (request, response) => {
     const options = {
         method: 'GET',
@@ -27,7 +48,8 @@ app.get('/heroes', (request, response) => {
         // json: true
     };
     rp(options).then(data => {
-       response.send(data);
+        response.setHeader('Content-Type', 'application/json');
+        response.send(data);
     })
     .catch(err => {
         console.log(err)
@@ -47,26 +69,7 @@ app.patch('/update-hero', (request, response) => {
         json: true // Automatically parses the JSON string in the response
     };
     rp(options).then(data => {
-        response.send(data);
-    })
-    .catch(err => {
-        console.log(err)
-    });
-});
-
-app.get('/user/:userId', (request, response) => {
-    const params = request.params;
-    const options = {
-        method: 'GET',
-        uri: `https://dota2fav.eu.auth0.com/api/v2/users/${params.userId}`,
-        headers: {
-            'Authorization': ManagementAPIToken,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        json: true // Automatically parses the JSON string in the response
-    };
-    rp(options).then(data => {
+        response.setHeader('Content-Type', 'application/json');
         response.send(data);
     })
     .catch(err => {
