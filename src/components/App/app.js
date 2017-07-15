@@ -1,68 +1,30 @@
 import React, { Component } from 'react';
 import './app.css';
 import HeroesList from '../Heroes/heroes';
+import NavBar from '../NavBar/nav-bar';
+import logo from './logo.png';
 
 class App extends Component {
-    goTo(route) {
-        this.props.history.replace(`/${route}`)
-    }
 
-    login() {
-        this.props.auth.login();
-    }
-
-    logout() {
-        this.props.auth.logout();
-    }
+    goTo(route) {this.props.history.replace(`/${route}`)};
+    login = () => this.props.auth.login();
+    logout = () => this.props.auth.logout();
 
     render() {
         const { isAuthenticated } = this.props.auth;
         return (
             <div className="App">
-                <nav className="navbar ">
-                    <div id="navMenuExample" className="navbar-menu">
-                        <div className="navbar-end">
-                            <div className="navbar-item">
-                                <div className="field is-grouped">
-                                    {
-                                        !isAuthenticated() && (
-                                            <p className="control">
-                                                <a className="button is-primary" onClick={this.login.bind(this)}>
-                                                    <span>Log in</span>
-                                                </a>
-                                            </p>
-                                        )
-                                    }
-                                    {
-                                        isAuthenticated() && (
-                                            <p className="control">
-                                                <a className="button is-primary" onClick={this.logout.bind(this)}>
-                                                    <span>Log Out</span>
-                                                </a>
-                                            </p>
-                                        )
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
+                <NavBar isAuthenticated={isAuthenticated} logout={this.logout} />
                 <div className="container">
                     {
                         isAuthenticated() && <HeroesList/>
                     }
                     {
                         !isAuthenticated() && (
-                            <h4>
-                                You are not logged in! Please{' '}
-                                <a
-                                    style={{cursor: 'pointer'}}
-                                    onClick={this.login.bind(this)}
-                                >
-                                    Log In
-                                </a>
-                                {' '}to continue.
-                            </h4>
+                            <div className="has-text-centered">
+                                <div><img style={{'max-width': '300px'}} src={logo} alt="Logo" /></div>
+                                <a className="button is-primary" style={{cursor: 'pointer', 'margin-top': '30px'}} onClick={this.login.bind(this)}>Log In</a>
+                            </div>
                         )
                     }
                 </div>

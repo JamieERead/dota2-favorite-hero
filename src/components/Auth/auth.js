@@ -46,9 +46,6 @@ export default class Auth {
 
         const idToken = jwt_decode(authResult.idToken);
         localStorage.setItem('user_id', idToken.sub);
-
-        // navigate to the home route
-        history.replace('/');
     }
 
     logout() {

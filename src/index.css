@@ -1,4 +1,4 @@
-html, body {
+html, body, .navbar {
     background-color: #222c35 !important;
 }
 body {
@@ -6,6 +6,13 @@ body {
     padding: 0;
     font-family: sans-serif;
     overflow-x: initial !important;
+}
+
+.button.is-primary,
+.button.is-primary.is-active,
+.button.is-primary:active,
+.button.is-primary:hover {
+    background-color: #a02916 !important;
 }
 
 .hero {
