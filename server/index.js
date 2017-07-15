@@ -66,6 +66,11 @@ app.get('/user/:userId', (request, response) => {
     });
 });
 
+// Always return the main index.html, so react-router render the route in the client
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
+});
+
 app.listen(port, (err) => {
     if (err) {
         return console.log('something bad happened', err);

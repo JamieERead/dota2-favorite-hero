@@ -1,2 +1,1 @@
-web: bin/web
-www: node ./server/index.js
+web: node ./server/index.js
