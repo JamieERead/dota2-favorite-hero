@@ -27,7 +27,8 @@
     "start-js": "react-scripts start",
     "build": "npm run build-css && react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "yarn run build-css && react-scripts build"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"
