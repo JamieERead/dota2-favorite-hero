@@ -1,6 +1,37 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+class FavouriteFilterBar extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    handleFilterChange = (value) => {
+        this.props.onFavouriteFilterChange(value);
+    };
+
+    render(){
+        const filterList = [
+            {id: 'all', name: 'ALL'},
+            {id: 'not-stared', name: 'NOT STARED'},
+            {id: 'stared', name: 'STARED'}
+        ];
+
+        let filters = [];
+
+        const currentFilter = this.props.favouriteFilter;
+        filterList.forEach(filter => {
+            const className = filter.id === currentFilter ? 'selected' : '';
+            filters.push(<a key={filter.id} onClick={() => this.handleFilterChange(filter.id)} className={className}>{filter.name}</a>);
+        });
+
+        return (
+            <div className="favourite-filter-bar">{filters}</div>
+        )
+    }
+
+}
+
 function HeroItem(props) {
     const heroName = props.hero.name.replace('npc_dota_hero_', '');
     const heroId = props.hero.id;
@@ -13,10 +44,11 @@ function HeroItem(props) {
     );
 }
 
-class HeroesList extends Component {
+class Heroes extends Component {
     constructor(){
         super();
         this.state = {
+            favouriteFilter: 'all', // all, stared, not-stared
             user: {},
             heroes: [],
             loading: true
@@ -72,16 +104,41 @@ class HeroesList extends Component {
             });
     }
 
+    handleFavouriteFilter = (selectedFilter) => {
+        this.setState({
+            favouriteFilter: selectedFilter
+        });
+    };
+
     render() {
         const heroes = this.state.heroes;
-        let listItems = [];
+        const favouriteFilter = this.state.favouriteFilter;
+        let heroesToDisplay = [];
+
         if(!this.state.loading){
-            listItems = heroes.map((hero) =>
-                <HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>
-            );
+            heroes.forEach((hero) => {
+                if(favouriteFilter === 'all'){
+                    heroesToDisplay.push(<HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>)
+                }
+                else if(favouriteFilter === 'not-stared' && !hero.favourite) {
+                    heroesToDisplay.push(<HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>)
+                }
+                else if(favouriteFilter === 'stared' && hero.favourite){
+                    heroesToDisplay.push(<HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>)
+                }
+            });
         }
-        return <ul className="heros">{listItems}</ul>;
+
+        return (
+            <div>
+                <FavouriteFilterBar
+                    favouriteFilter={this.state.favouriteFilter}
+                    onFavouriteFilterChange={this.handleFavouriteFilter}
+                />
+                <ul className="heros">{heroesToDisplay}</ul>
+            </div>
+        );
     }
 }
 
-export default HeroesList;
+export default Heroes;

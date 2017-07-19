@@ -15,6 +15,26 @@ body {
     background-color: #a02916 !important;
 }
 
+/* favourite filter bar */
+.favourite-filter-bar {
+    margin-bottom: 20px;
+}
+.favourite-filter-bar a {
+    margin: 0 25px;
+    padding: 10px 20px;
+    color: #ffffff;
+    border-bottom: 2px solid #fff;
+    opacity: 0.4;
+}
+.favourite-filter-bar a:hover {
+    opacity: 0.7;
+    color: #ffffff;
+}
+.favourite-filter-bar a.selected {
+    opacity: 1;
+}
+
+/* hero */
 .hero {
     position: relative;
     width: 100px;

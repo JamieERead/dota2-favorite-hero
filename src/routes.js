@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, BrowserRouter } from 'react-router-dom';
-import App from './components/App/app';
-import Callback from './components/Callback/Callback';
-import Auth from './components/Auth/auth';
+import App from './components/app/app';
+import Callback from './components/callback/callback';
+import Auth from './components/auth/auth';
 import history from './history';
 
 const auth = new Auth();

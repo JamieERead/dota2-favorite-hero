@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './app.css';
-import HeroesList from '../Heroes/heroes';
-import NavBar from '../NavBar/nav-bar';
+import Heroes from '../heroes/heroes';
+import NavBar from '../navBar/nav-bar';
 import logo from './logo.png';
 
 class App extends Component {
@@ -17,7 +17,7 @@ class App extends Component {
                 <NavBar isAuthenticated={isAuthenticated} logout={this.logout} />
                 <div className="container">
                     {
-                        isAuthenticated() && <HeroesList/>
+                        isAuthenticated() && <Heroes />
                     }
                     {
                         !isAuthenticated() && (
