@@ -50,6 +50,17 @@ body {
     bottom: 0;
     border: 1px solid #000;
 }
+.hero .hero-name {
+    position: absolute;
+    bottom: -5px;
+    color: #fff;
+    font-size: 13px;
+    text-transform: capitalize;
+    text-align: center;
+    left: 0;
+    right: 0;
+    background: rgba(17, 17, 17, 0.73);
+}
 
 .hero i {
     position: absolute;

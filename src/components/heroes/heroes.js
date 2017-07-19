@@ -34,12 +34,14 @@ class FavouriteFilterBar extends Component {
 
 function HeroItem(props) {
     const heroName = props.hero.name.replace('npc_dota_hero_', '');
+    const heroNameFormatted = props.hero.name.replace('npc_dota_hero_', '').replace('_', '');
     const heroId = props.hero.id;
     const iconClass = props.hero.favourite ? 'fa fa-star' : 'fa fa-star-o';
     return(
         <li className="hero">
             <i className={iconClass} aria-hidden="true" onClick={() => props.toggleFavouriteHero(heroId)}></i>
             <img src={`http://cdn.dota2.com/apps/dota2/images/heroes/${heroName}_vert.jpg`} alt={heroName} />
+            <span className='hero-name'>{heroNameFormatted}</span>
         </li>
     );
 }
@@ -69,10 +71,18 @@ class Heroes extends Component {
             const user = _user.data;
             const favoriteHeroes = (user.user_metadata && user.user_metadata.heroes)
                                 ? user.user_metadata.heroes : [];
+
+            heroes.sort((a, b) => {
+                if(a.name < b.name) return -1;
+                if(a.name > b.name) return 1;
+                return 0;
+            });
+
             const formattedHeroes = heroes.map(hero => {
                 hero['favourite'] = favoriteHeroes.indexOf(hero.id) !== -1;
                 return hero;
             });
+
             this.setState({
                 user: user,
                 heroes: formattedHeroes,
