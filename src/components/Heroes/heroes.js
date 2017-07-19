@@ -28,29 +28,28 @@ class HeroesList extends Component {
     }
 
     loadHeroes(){
-        let user = {};
-        axios.get('/user/' + localStorage.getItem('user_id'))
-            .then(_user => {
-                user = _user.data;
-                return axios.get('/heroes');
-            })
-            .then(({data}) => {
-                const heroes = data.result.heroes;
-                const favoriteHeroes = (user.user_metadata && user.user_metadata.heroes)
-                                    ? user.user_metadata.heroes : [];
-                const formattedHeroes = heroes.map(hero => {
-                    hero['favourite'] = favoriteHeroes.indexOf(hero.id) !== -1;
-                    return hero;
-                });
-                this.setState({
-                    user: user,
-                    heroes: formattedHeroes,
-                    loading: false
-                });
-            })
-            .catch(function(error) {
-              console.log('Request failed', error)
+        Promise.all([
+            axios.get('/user/' + localStorage.getItem('user_id')),
+            axios.get('/heroes')
+        ])
+        .then(([_user, _heroes]) => {
+            const heroes = _heroes.data.result.heroes;
+            const user = _user.data;
+            const favoriteHeroes = (user.user_metadata && user.user_metadata.heroes)
+                                ? user.user_metadata.heroes : [];
+            const formattedHeroes = heroes.map(hero => {
+                hero['favourite'] = favoriteHeroes.indexOf(hero.id) !== -1;
+                return hero;
             });
+            this.setState({
+                user: user,
+                heroes: formattedHeroes,
+                loading: false
+            });
+        })
+        .catch(function(error) {
+          console.log('Request failed', error)
+        });
     }
 
     toggleFavouriteHero = (heroId) => {
@@ -66,11 +65,8 @@ class HeroesList extends Component {
     };
 
     saveHeroes(favoriteHeroes){
-        const payload = {
-            userId: localStorage.getItem('user_id'),
-            data: {user_metadata: {heroes: favoriteHeroes} },
-        };
-        axios.patch('/update-hero', payload)
+        const payload = {user_metadata: {heroes: favoriteHeroes} };
+        axios.patch('/update-hero/' + localStorage.getItem('user_id'), payload)
             .catch(function(error) {
                 console.log('Request failed', error)
             });

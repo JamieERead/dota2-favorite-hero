@@ -21,7 +21,8 @@
     "request-promise": "^4.2.1"
   },
   "scripts": {
-    "start": "concurrently \"node ./server/index.js\" \"npm run build-css && react-scripts build\"",
+    "start": "react-scripts start",
+    "start:server": "node ./server/index.js",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
