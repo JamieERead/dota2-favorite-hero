@@ -82,7 +82,7 @@ app.patch('/update-hero/:userId', (request, response) => {
 app.get('/heroes', (request, response) => {
     const options = {
         method: 'GET',
-        uri: 'https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v1?key=3D7D20701E1BA0C6C66D11A76D95FA58',
+        uri: 'https://api.steampowered.com/IEconDOTA2_570/GetHeroes/v1?key=3D7D20701E1BA0C6C66D11A76D95FA58&language=gb',
     };
     rp(options).then(data => {
         response.send(data);
