@@ -13,8 +13,8 @@ class FavouriteFilterBar extends Component {
     render(){
         const filterList = [
             {id: 'all', name: 'ALL'},
-            {id: 'not-stared', name: 'NOT STARED'},
-            {id: 'stared', name: 'STARED'}
+            {id: 'not-favourite', name: 'NOT STARED'},
+            {id: 'favourite', name: 'STARED'}
         ];
 
         let filters = [];
@@ -125,18 +125,29 @@ class Heroes extends Component {
         const favouriteFilter = this.state.favouriteFilter;
         let heroesToDisplay = [];
 
+        function keepHero(hero){
+            let keep = false;
+            switch(favouriteFilter) {
+                case 'all':
+                    keep = true;
+                    break;
+                case 'not-favourite':
+                    keep = !hero.favourite;
+                    break;
+                case 'favourite':
+                    keep = hero.favourite;
+                    break;
+                default:
+                    keep = false;
+                    break;
+            }
+            return keep;
+        }
+
         if(!this.state.loading){
-            heroes.forEach((hero) => {
-                if(favouriteFilter === 'all'){
-                    heroesToDisplay.push(<HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>)
-                }
-                else if(favouriteFilter === 'not-stared' && !hero.favourite) {
-                    heroesToDisplay.push(<HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>)
-                }
-                else if(favouriteFilter === 'stared' && hero.favourite){
-                    heroesToDisplay.push(<HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>)
-                }
-            });
+            heroesToDisplay = heroes.map(hero => {
+                return keepHero(hero) && (<HeroItem key={hero.id.toString()} hero={hero} toggleFavouriteHero={this.toggleFavouriteHero}/>);
+            })
         }
 
         return (
