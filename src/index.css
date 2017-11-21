@@ -3,7 +3,7 @@ html, body, .navbar {
 }
 body {
     margin: 0;
-    padding: 0 0 30px 0 !important;
+    padding: 0;
     font-family: sans-serif;
     overflow-x: initial !important;
 }
@@ -15,27 +15,7 @@ body {
     background-color: #a02916 !important;
 }
 
-/* favourite filter bar */
-.favourite-filter-bar {
-    margin-bottom: 20px;
-}
-.favourite-filter-bar a {
-    margin: 0 25px;
-    padding: 10px 20px;
-    color: #ffffff;
-    border-bottom: 2px solid #fff;
-    opacity: 0.4;
-}
-.favourite-filter-bar a:hover {
-    opacity: 0.7;
-    color: #ffffff;
-}
-.favourite-filter-bar a.selected {
-    opacity: 1;
-}
-
-/* hero */
-.dota-hero {
+.hero {
     position: relative;
     width: 100px;
     float: left;
@@ -43,29 +23,15 @@ body {
     min-height: 110px;
 }
 
-.dota-hero .hero-image {
+.hero img {
     position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
-    min-height: 115px;
     border: 1px solid #000;
 }
-.dota-hero .hero-name {
-    display: none;
-    position: absolute;
-    color: #fff;
-    font-size: 13px;
-    text-align: center;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 25;
-    background: rgba(17, 17, 17, 0.73);
-    text-transform: uppercase;
-}
 
-.dota-hero i {
+.hero i {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -73,35 +39,27 @@ body {
     font-size: 21px;
     opacity: 0.8;
 }
-.dota-hero i.fa-star-o {
+.hero i.fa-star-o {
     color: #f7f7f7;
 }
-.dota-hero i.fa-star {
+.hero i.fa-star {
     color: yellow;
 }
 
 /* hover state */
-.dota-hero i.fa-star:hover,
-.dota-hero i.fa-star-o:hover{
+.hero i.fa-star:hover,
+.hero i.fa-star-o:hover{
     color: yellow;
 }
-.dota-hero:hover .hero-name {
-    display: block;
-}
-.dota-hero:hover i {
+.hero:hover i {
     top: 5px;
     right: 5px;
     font-size: 25px;
 }
-.dota-hero:hover .hero-image {
-    top: -15px;
-    width: 130%;
-    max-width: 130%;
-    height: 136%;
-    left: -15px;
-    z-index: 20;
-}
-
-.clear-both {
-    clear: both;
+.hero:hover img {
+    top: -5px;
+    width: 110%;
+    max-width: 110%;
+    left: -5px;
+    z-index: 10;
 }
